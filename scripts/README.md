@@ -23,5 +23,5 @@ This folder contains all R scripts used for data cleaning, descriptive analysis,
 ##  Reproducibility Workflow
 1. **Run** `scripts/01_data_cleaning.R` → creates clean dataset  
 2. **Run** `scripts/02_descriptive_analysis.R` → generates summary tables  
-3. **Run** `scripts/03_logistic_models.R` *(when available)* → performs main regression analysis  
+3. **Run** `scripts/03_logistic_models.R` *(in progress)* → performs main regression analysis  
 
