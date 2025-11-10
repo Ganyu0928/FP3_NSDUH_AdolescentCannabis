@@ -25,3 +25,4 @@ This folder contains all R scripts used for data cleaning, descriptive analysis,
 2. **Run** `scripts/02_descriptive_analysis.R` → generates summary tables  
 3. **Run** `scripts/03_logistic_models.R` *(in progress)* → performs main regression analysis  
 
+# Test commit - verifying git setup for week4
