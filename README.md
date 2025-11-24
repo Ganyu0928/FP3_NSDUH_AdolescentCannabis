@@ -27,9 +27,34 @@ Research has shown that adolescents’ perceptions of the risk of using marijuan
   
 ## Folder structure
 FP3_NSDUH_AdolescentCannabis/
-├── data_raw/ # Contains original NSDUH_2023.Rdata
-├── data_clean/ # Cleaned datasets (nsduh_2023_clean.Rdata / .csv)
-├── scripts/ # Analysis scripts (01_data_cleaning.R, 02_descriptive_analysis.R)
-├── output/ # Tables and results (e.g., descriptive_table1.csv)
-└── README.md # Project documentation
+├── data_raw/                # Contains original NSDUH_2023.Rdata (not uploaded)
+├── data_clean/              # Cleaned datasets (nsduh_2023_clean.Rdata / .csv)
+├── scripts/                 # Analysis scripts (ordered 00–05)
+│     ├── 00_setup.R
+│     ├── 01_data_cleaning.R
+│     ├── 02_missingness_recodes.R
+│     ├── 04_descriptive_analysis.R
+│     └── 05_interaction_model.R
+├── output/                  # Tables and results
+├── docs/                    # PICOT, DAG, reproducibility plan, progress logs
+└── README.md
+
+## Analysis Scripts
+Analysis Scripts
+01_data_cleaning.R
+
+Imports NSDUH data, applies initial cleaning, recodes needed variables, and produces the first analytic dataset.
+
+02_descriptive_analysis.R
+
+Runs descriptive summaries for demographic variables, perceived risk categories, and marijuana use, including frequency tables and cross-tabulations.
+
+03_descriptive_analysis.R
+
+Contains all inferential models:
+
+unadjusted logistic regression
+
+adjusted logistic regression with covariates
+Outputs include regression tables and model summary files.
 
