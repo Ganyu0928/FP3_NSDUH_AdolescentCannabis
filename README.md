@@ -58,3 +58,17 @@ unadjusted logistic regression
 adjusted logistic regression with covariates
 Outputs include regression tables and model summary files.
 
+## Progress Logs (Weeks 2–4)
+Week 2 Progress Log
+
+This week I imported the raw 2023 NSDUH data and began initial data. I reviewed the codebook, identified required variables for the exposure, outcome, and covariates, and outlined the cleaning plan for the analytic dataset. I also drafted the PICOT question, confirmed the inclusion criteria (adolescents ages 12–17), and created the preliminary folder structure for the GitHub repository in preparation for subsequent weeks.
+
+Week 3 Progress Log
+
+During Week 3, I completed the majority of the data cleaning steps and finalized the operational definitions for perceived risk, marijuana use, and demographic variables. I recoded the NSDUH missing-value codes, created initial descriptive summaries, and verified that the cleaned dataset matched expected sample sizes. I added the cleaned dataset to the GitHub repository and updated the project structure to ensure reproducibility.
+
+Week 4 Progress Log
+
+This week I finalized the analytic dataset and completed descriptive and bivariate analyses. I generated frequency tables, cross-tabulations, and a proportional bar chart illustrating the inverse association between perceived risk and marijuana use. I ran both unadjusted and adjusted logistic regression models, with results showing a strong negative association between perceived risk and marijuana use. All tables, figures, and model outputs were added to GitHub, and the Week 4 analytic dataset was saved for use in Week 5 modeling.
+
+## Reproducibility Workflow
