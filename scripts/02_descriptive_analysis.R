@@ -11,38 +11,26 @@ load("data_clean/nsduh_2023_clean.Rdata")
 ls() # data/ data_clean/ nsduh_2023_raw
 
 # Optional: view first few rows
+str(data_clean)
 head(data_clean)
-# RSK 1,1,3...; MJDAY 0,0,0,; IRSEX 1,1,2,
 
 # 2. Frequency table
 # Perceived risk (RSKMRJWK)
 table(data_clean$RSKMRJWK, useNA = "ifany")
-# 1     2     3     4    85    94    97    98 
-# 12735 17167 13234 12624     2   666    82   195 
 
 # 30-day marijuana use (MJDAY30A: 0 = No, 1 = Yes)
 table(data_clean$MJDAY30A, useNA = "ifany")
-#    0     1  <NA> 
-# 46686  9660   359 
 
 # Sex (IRSEX: 0 = Male, 1 = Female)
 table(data_clean$IRSEX, useNA = "ifany")
-# 1     2 
-# 26145 30560 
 
 # 3. Cross-tabulations  -
 # Perceived risk × marijuana use
 risk_use <- table(data_clean$RSKMRJWK, data_clean$MJDAY30A)
 risk_use
-#          0     1
-# 1   7614  4983
-# 2  13531  3522
-# 3  12298   877
-# 4  12374   222
-# 85     1     1
-# 94   638    18
-# 97    70     4
-# 98   160    33
+
+# Row percentages
+round(prop.table(risk_use, margin = 1)* 100, 1)
 
 # Perceived risk × marijuana use × sex (optional)
 risk_use_sex <- with(data_clean, table(RSKMRJWK, MJDAY30A, IRSEX))

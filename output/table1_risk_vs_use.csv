@@ -1,0 +1,16 @@
+"Var1","Var2","Freq"
+"No risk","No use",1006
+"Slight risk","No use",2447
+"Moderate risk","No use",3422
+"Great risk","No use",3478
+NA,"No use",296
+"No risk","Used",322
+"Slight risk","Used",331
+"Moderate risk","Used",116
+"Great risk","Used",30
+NA,"Used",1
+"No risk",NA,32
+"Slight risk",NA,43
+"Moderate risk",NA,25
+"Great risk",NA,15
+NA,NA,8
