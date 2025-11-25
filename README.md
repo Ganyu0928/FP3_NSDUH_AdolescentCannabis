@@ -32,9 +32,9 @@ FP3_NSDUH_AdolescentCannabis/
 ├── scripts/                 # Analysis scripts (ordered 00–05)
 │     ├── 00_setup.R
 │     ├── 01_data_cleaning.R
-│     ├── 02_missingness_recodes.R
-│     ├── 04_descriptive_analysis.R
-│     └── 05_interaction_model.R
+│     ├── 02_descriptive_analysis.R
+│     ├── 03_modeling.R
+│     └── 04_interaction_model.R
 ├── output/                  # Tables and results
 ├── docs/                    # PICOT, DAG, reproducibility plan, progress logs
 └── README.md
@@ -49,7 +49,7 @@ Imports NSDUH data, applies initial cleaning, recodes needed variables, and prod
 
 Runs descriptive summaries for demographic variables, perceived risk categories, and marijuana use, including frequency tables and cross-tabulations.
 
-03_descriptive_analysis.R
+03_modeling.R
 
 Contains all inferential models:
 
