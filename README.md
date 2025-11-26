@@ -20,18 +20,28 @@ Adolescent marijuana use remains stable nationally, but perceived harm has stead
   - `IRSEX` – Respondent’s sex  
 
 ## Folder structure
-FP3_NSDUH_AdolescentCannabis/
-├── data_raw/              # Contains original NSDUH_2023.Rdata (not uploaded)
-├── data_clean/            # Cleaned datasets (nsduh_2023_clean.Rdata / .csv)
-├── scripts/               # Analysis scripts
-│   ├── 01_data_cleaning.R
-│   ├── 02_descriptive_analysis.R
-│   ├── 03_modeling.R
-│   └── 04_interaction_model.R
-├── output/                # Tables and results
-├── docs/                  # PICOT, DAG, reproducibility plan, progress logs
-├── progress_logs/         # Weekly logs
-└── README.md
+- **data_raw/**  
+  - Contains original NSDUH_2023.Rdata (nsduh_2023.Rdata)
+
+- **data_clean/**  
+  - Cleaned datasets (nsduh_2023_clean.Rdata / .csv)
+
+- **scripts/**  
+  - 01_data_cleaning.R  
+  - 02_descriptive_analysis.R  
+  - 03_modeling.R  
+  - 04_interaction_model.R
+
+- **output/**  
+  - Tables and results
+
+- **docs/**  
+  - PICOT, DAG, reproducibility plan, progress logs
+
+- **progress_logs/**  
+  - Weekly logs
+
+- **README.md**
 
 ## Reproduce the Analysis
 1. Clone the repository.
@@ -44,6 +54,5 @@ FP3_NSDUH_AdolescentCannabis/
 4. All outputs will be automatically saved to `/output/`.
 
 ## Documentation
-progress logs: /progress_logs/
-PICOT, DAG, Codebook notes, Workflow: /docs/
-
+- progress logs: `/progress_logs/`
+- PICOT, DAG, Codebook notes, Workflow: `/docs/`
