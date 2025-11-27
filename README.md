@@ -36,7 +36,7 @@ Adolescent marijuana use remains stable nationally, but perceived harm has stead
   - Tables and results
 
 - **docs/**  
-  - PICOT, DAG, reproducibility plan, progress logs
+  - PICOT, DAG, reproducibility plan, codebook_notes, data_cleaning_notes
 
 - **progress_logs/**  
   - Weekly logs
