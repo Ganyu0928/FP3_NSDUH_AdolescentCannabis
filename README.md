@@ -1,7 +1,7 @@
-# FP3_NSDUH_AdolescentCannabis
-FP3 project analyzing perceived risk and marijuana use among adolescents using 2023 NSDUH data.
+# NSDUH_AdolescentCannabis
+This project analyzing perceived risk and marijuana use among adolescents using 2023 NSDUH data.
 
-# FP3_NSDUH_AdolescentCannabis
+# NSDUH_AdolescentCannabis
 This project analyzes the association between **perceived risk of marijuana use** and **past 30-day marijuana use** among U.S. adolescents (ages 12–17) using the 2023 **National Survey on Drug Use and Health (NSDUH)** dataset.  
 
 ## Background
