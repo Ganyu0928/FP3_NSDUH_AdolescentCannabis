@@ -1,5 +1,5 @@
 # =======================================================
-# FP3 Project: Perceived Risk and Marijuana Use (NSDUH 2023)
+# Project: Perceived Risk and Marijuana Use (NSDUH 2023)
 # Script: 01_data_cleaning.R
 # Purpose: Keep only key variables and recode them for analysis (Week 2)
 # =======================================================

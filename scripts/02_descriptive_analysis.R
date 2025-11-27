@@ -1,5 +1,5 @@
 # =======================================================
-# FP3 Project: Perceived Risk and Marijuana Use (NSDUH 2023)
+# Project: Perceived Risk and Marijuana Use (NSDUH 2023)
 # Script: 02_descriptive_analysis.R
 # Purpose: Descriptive and bivariate analysis (Week 3)
 # =======================================================

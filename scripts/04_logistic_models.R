@@ -1,5 +1,5 @@
 # =========================================================================
-# FP3 Project: Perceived Risk and Marijuana Use (NSDUH 2023)
+# Project: Perceived Risk and Marijuana Use (NSDUH 2023)
 # Script: 04_logistic_modeling.R
 # Purpose: Logistic Regression Analyses (Week 5)
 # =========================================================================

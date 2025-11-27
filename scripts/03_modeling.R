@@ -1,5 +1,5 @@
 # =========================================================================
-# FP3 Project: Perceived Risk and Marijuana Use (NSDUH 2023)
+# Project: Perceived Risk and Marijuana Use (NSDUH 2023)
 # Script: 03_modeling.R
 # Purpose: finalize analytic dataset, descriptive table, and model (Week 4)
 # =========================================================================
