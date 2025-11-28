@@ -115,10 +115,9 @@ saveRDS(model3_int, file.path(output_path, "model3_interaction.rds"))
 # Compare main-effects model vs interaction model
 lrtest(model2, model3_int)
 
-
-
 # 14. Model performance for interaction model (Predicted probabilities with interaction)
 odds.n.ends(model3_int, predProbPlot = TRUE)
 
 # ROC curve for interaction model
 odds.n.ends(model3_int, rocPlot = TRUE)
+
