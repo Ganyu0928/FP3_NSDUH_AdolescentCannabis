@@ -158,7 +158,7 @@ analytic$RSKMRJWK <- factor(
 Figure 1. Flowchart of exclusions
 
 ```{r}
-grViz("digraph flowchart {
+p <- grViz("digraph flowchart {
 
       node [fontname = Helvetica, shape = rectangle, fontsize = 15] 
       
@@ -174,7 +174,6 @@ grViz("digraph flowchart {
       [3]: 'Excluding missing past 30-day marijuana use (MJDAY30A): n excluded = 115; n remaining = 11152'
       [4]: 'Excluding missing sex (IRSEX): n excluded = 0; Final analytic sample = 11152'
       ")
-
 ```
 
 ## 3.3 Descriptive Cross-Tabulations
@@ -197,12 +196,22 @@ Interpretation:
 ### Table 1. Descriptive Characteristics
 ```{r}
 library(table1)
+library(webshot2)
 
+label(analytic$AGE3)     <- "Age (3-level)"
+label(analytic$IRSEX)    <- "Sex"
+label(analytic$RSKMRJWK) <- "Perceived risk of weekly marijuana use"
+label(analytic$YFLMJMO)  <- "Peer disapproval of marijuana use"
+label(analytic$YEPMJMO)  <- "Parental disapproval of marijuana use"
+label(analytic$MJDAY30A) <- "Past 30-day marijuana use"
 # Table 1
-table1(~ AGE3 + IRSEX + RSKMRJWK + YFLMJMO + YEPMJMO + MJDAY30A,
+t1 <- table1(~ AGE3 + IRSEX + RSKMRJWK + YFLMJMO + YEPMJMO + MJDAY30A,
        data = analytic,
        overall = TRUE,
-       caption = "Table 1. Descriptive Characteristics of the Analytic Sample")
+       caption = "Table 1. Descriptive Characteristics of the Analytic Sample",
+       render.strat = function(...) ""
+       )
+t1
 ```
 
 ## 3.4 Figure 2. Marijuana Use by Perceived Risk
