@@ -224,7 +224,7 @@ ggplot(analytic, aes(x = RSKMRJWK, fill = MJDAY30A)) +
   theme_bw()
 ```
 Interpretation: 
-This figure 1. shows a strong inverse relationship between perceived risk and past 30-day marijuana use among adolescents. 
+This figure 2. shows a strong inverse relationship between perceived risk and past 30-day marijuana use among adolescents. 
 In the NO RISK group, 322 adolescents reported marijuana use, compared to 1006 who did not use. 
 In the SLIGHT RISK group, 331 reported use and 2447 did not use.
 In the MODERATE RISK group, 116 reported use and 3442 did not use.
@@ -296,8 +296,8 @@ odds.n.ends(model3)
 Intepretation: 
 Peer disapproval has a stronger protective association than parental disapproval.
 - The odds of use for adolescents perceiving slight risk are 0.55 times the odds among those perceiving no risk, after adjusting for age, sex, peer disapproval, and parental disapproval.
-- The odds of use for adolescents perceiving slight risk are 0.25 times the odds among those perceiving no risk, after adjusting for age, sex, peer disapproval, and parental disapproval.
-- The odds of use for adolescents perceiving slight risk are 0.08 times the odds among those perceiving no risk, after adjusting for age, sex, peer disapproval, and parental disapproval.
+- The odds of use for adolescents perceiving moderate risk are 0.25 times the odds among those perceiving no risk, after adjusting for age, sex, peer disapproval, and parental disapproval.
+- The odds of use for adolescents perceiving great risk are 0.08 times the odds among those perceiving no risk, after adjusting for age, sex, peer disapproval, and parental disapproval.
 - Each one-unit increase in age is associated with a 2-fold higher odds of marijuana use.
 - Females have 1.42 times the odds of marijuana use compared with males.
 - Adolescents who report that their friends disapprove of marijuana use have 0.19 times the odds of using, compared with those whose peers are neutral/permissive.
