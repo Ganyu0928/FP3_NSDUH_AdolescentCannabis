@@ -7,8 +7,10 @@ output:
     toc: true
     toc_float: true
     number_sections: true
-editor_options: 
-  markdown: 
+  pdf_document:
+    toc: true
+editor_options:
+  markdown:
     wrap: 72
 ---
 
@@ -53,11 +55,12 @@ model including sex Interaction model testing risk × sex Predicted probabilitie
 ## 2.4 Study Population 
 The sample included adolescents ages 12–17 with complete information on perceived risk, past 30-day marijuana use, and sex. Exclusion steps were applied. A flow diagram (Figure 1) summarizes how the final analytic dataset was created. 
 
-# 3.Results 
+# 3. Results 
 ## 3.1 Study Flow and Exclusion Diagram
 ```{r}
 # Load raw NSDUH data
 load("~/Desktop/FA2025/6009/assignment-1-RQ/Github/FP3_NSDUH_AdolescentCannabis/data_raw/NSDUH_2023.Rdata")
+
 # The raw object is named "data"
 data_raw <- data
 
@@ -74,7 +77,10 @@ start_n <- nrow(data_adol)
 
 # Step 2: Exclude missing perceived risk (same as 01)
 ex1 <- data_adol %>%
-  mutate(RSKMRJWK = ifelse(RSKMRJWK %in% c(85,94,97,98), NA, RSKMRJWK)) %>%
+  mutate(
+    RSKMRJWK = as.numeric(RSKMRJWK),
+    RSKMRJWK = ifelse(RSKMRJWK %in% c(85,94,97,98), NA, RSKMRJWK)
+    ) %>%
   drop_na(RSKMRJWK)
 
 n_ex1 <- start_n - nrow(ex1)
@@ -94,13 +100,60 @@ n_ex2 <- nrow(ex1) - nrow(ex2)
 
 # Step 4: Exclude missing sex
 ex3 <- ex2 %>% drop_na(IRSEX)
-
 n_ex3 <- nrow(ex2) - nrow(ex3)
 
 # Final analytic sample size
+analytic <- ex3
 final_n <- nrow(ex3)
 
 start_n; n_ex1; n_ex2; n_ex3; final_n
+
+# Recode IRSEX properly (1 = Male, 2 = Female)
+analytic$IRSEX <- factor(analytic$IRSEX,
+                         levels = c(1,2),
+                         labels = c("Male","Female"))
+
+# Recode AGE3 properly (1,2,3)
+analytic$AGE3 <- as.numeric(analytic$AGE3)
+
+# Clean peer disapproval (YFLMJMO)
+analytic <- analytic %>%
+  mutate(
+    YFLMJMO = as.numeric(YFLMJMO),
+    YFLMJMO = case_when(
+      YFLMJMO == 1 ~ 1,     # disapprove
+      YFLMJMO == 2 ~ 0,     # neutral/permissive
+      TRUE ~ NA_real_       # missing
+    ),
+    YFLMJMO = factor(
+      YFLMJMO,
+      levels = c(0,1),
+      labels = c("Neutral/Permissive", "Disapprove")
+    )
+  )
+# Clean parent disapproval (YEPMJMO)
+analytic <- analytic %>%
+  mutate(
+    YEPMJMO = as.numeric(YEPMJMO),
+    YEPMJMO = case_when(
+      YEPMJMO %in% c(2,3) ~ 1,                   # disapprove
+      YEPMJMO == 1 ~ 0,                          # neutral
+      YEPMJMO %in% c(85,94,97,98,99) ~ NA_real_, # missing
+      TRUE ~ NA_real_
+    ),
+    YEPMJMO = factor(
+      YEPMJMO,
+      levels = c(0,1),
+      labels = c("Neutral", "Disapprove")
+    )
+  )
+
+# Fix perceived risk coding
+analytic$RSKMRJWK <- factor(
+  as.numeric(analytic$RSKMRJWK),
+  levels = c(1,2,3,4),
+  labels = c("No risk","Slight risk","Moderate risk","Great risk")
+)
 ```
 Figure 1. Flowchart of exclusions
 
@@ -145,30 +198,6 @@ Interpretation:
 ```{r}
 library(table1)
 
-# Define factor labels if needed
-analytic$IRSEX <- factor(analytic$IRSEX, 
-                         levels = c("Male", "Female"))
-
-analytic$RSKMRJWK <- factor(analytic$RSKMRJWK,
-                            levels = c("No risk", "Slight risk", 
-                                       "Moderate risk", "Great risk"))
-
-analytic$AGE3 <- factor(analytic$AGE3,
-                        levels = c(1,2,3),
-                        labels = c("12–13", "14–15", "16–17"))
-
-analytic$YFLMJMO <- factor(analytic$YFLMJMO,
-                           levels = c(0,1),
-                           labels = c("Neutral/Permissive", "Disapprove"))
-
-analytic$YEPMJMO <- factor(analytic$YEPMJMO,
-                           levels = c(0,1),
-                           labels = c("Neutral", "Disapprove"))
-
-analytic$MJDAY30A <- factor(analytic$MJDAY30A,
-                            levels = c(0,1),
-                            labels = c("No use", "Any use"))
-
 # Table 1
 table1(~ AGE3 + IRSEX + RSKMRJWK + YFLMJMO + YEPMJMO + MJDAY30A,
        data = analytic,
@@ -179,15 +208,20 @@ table1(~ AGE3 + IRSEX + RSKMRJWK + YFLMJMO + YEPMJMO + MJDAY30A,
 ## 3.4 Figure 2. Marijuana Use by Perceived Risk
 
 ```{r}
+# Ensure MJDAY30A is a factor
+analytic$MJDAY30A <- factor(analytic$MJDAY30A,
+                            levels = c(0,1),
+                            labels = c("No use","Any use"))
+
 ggplot(analytic, aes(x = RSKMRJWK, fill = MJDAY30A)) +
-geom_bar(position = "fill") +
-labs(
-title = "Marijuana Use by Perceived Risk (Adolescents, NSDUH 2023)",
-x = "Perceived Risk",
-y = "Proportion",
-fill = "Past 30-Day Use"
-) +
-theme_bw()
+  geom_bar(position = "fill") +
+  labs(
+    title = "Marijuana Use by Perceived Risk (Adolescents, NSDUH 2023)",
+    x = "Perceived Risk",
+    y = "Proportion",
+    fill = "Past 30-Day Use"
+  ) +
+  theme_bw()
 ```
 Interpretation: 
 This figure 1. shows a strong inverse relationship between perceived risk and past 30-day marijuana use among adolescents. 
@@ -225,48 +259,6 @@ model2 <- glm(MJDAY30A ~ RSKMRJWK + AGE3 + IRSEX,
 summary(model2)
 odds.n.ends(model2)
 ```
-### Table 2. Adjusted Odds Ratios for Past 30-Day Marijuana Use (Model 3)
-```{r}
-# Clean variable label map
-label_map <- c(
-  "RSKMRJWKSlight risk" = "Slight risk vs No risk",
-  "RSKMRJWKModerate risk" = "Moderate risk vs No risk",
-  "RSKMRJWKGreat risk" = "Great risk vs No risk",
-  "AGE3" = "Age (per category)",
-  "IRSEXFemale" = "Female vs Male",
-  "YFLMJMO" = "Peer disapproval (yes vs no)",
-  "YEPMJMO" = "Parental disapproval (yes vs no)",
-  "RSKMRJWKSlight risk:IRSEXFemale" = "Interaction: Slight risk × Female",
-  "RSKMRJWKModerate risk:IRSEXFemale" = "Interaction: Moderate risk × Female",
-  "RSKMRJWKGreat risk:IRSEXFemale" = "Interaction: Great risk × Female"
-)
-
-# Table 2
-model3_df <- data.frame(
-  Variable = rownames(exp(cbind(OR = coef(model3), confint(model3)))),
-  exp(cbind(OR = coef(model3), confint(model3)))
-)
-
-model3_df <- model3_df[model3_df$Variable != "(Intercept)", ]
-model3_df$Variable <- label_map[model3_df$Variable]
-
-colnames(model3_df) <- c("Variable","OR","Lower 95% CI","Upper 95% CI")
-model3_df
-```
-### Table 3. Interaction Model of Perceived Risk × Sex (Model 4)
-```{r}
-model4_df <- data.frame(
-  Variable = rownames(exp(cbind(OR = coef(model4), confint(model4)))),
-  exp(cbind(OR = coef(model4), confint(model4)))
-)
-
-model4_df <- model4_df[model4_df$Variable != "(Intercept)", ]
-model4_df$Variable <- label_map[model4_df$Variable]
-
-colnames(model4_df) <- c("Variable","OR","Lower 95% CI","Upper 95% CI")
-model4_df
-```
-
 
 Intepretation:
 After adjusting for age and sex, perceived risk remains a strong independent predictor, and age shows a major driver of use. Female also show higher reported use than males. 
@@ -286,8 +278,10 @@ As the results shown, adding age and sex significantly improves model fit (p-val
 Model 3: Full Adjusted (demographics + peer + parent)
 
 ```{r}
-# this step is to make sure all model has the same size
 complete_data <- analytic %>%
+  mutate(
+    MJDAY30A = factor(MJDAY30A, levels = c("No use", "Any use"))
+  ) %>%
   dplyr::select(MJDAY30A, RSKMRJWK, AGE3, IRSEX, YFLMJMO, YEPMJMO) %>%
   drop_na()
 # check size
@@ -323,6 +317,35 @@ lmtest::lrtest(model2_adj, model3)
 ```
 As a result, it clearly showed that adding peer and parental disapproval substantially improves model fit. These are highly important predictors of adolescent marijuana use. 
 
+### Table 2. Adjusted Odds Ratios for Past 30-Day Marijuana Use (Model 3)
+```{r}
+# Clean variable label map
+label_map <- c(
+  "RSKMRJWKSlight risk" = "Slight risk vs No risk",
+  "RSKMRJWKModerate risk" = "Moderate risk vs No risk",
+  "RSKMRJWKGreat risk" = "Great risk vs No risk",
+  "AGE3" = "Age (per category)",
+  "IRSEXFemale" = "Female vs Male",
+  "YFLMJMO" = "Peer disapproval (yes vs no)",
+  "YEPMJMO" = "Parental disapproval (yes vs no)",
+  "RSKMRJWKSlight risk:IRSEXFemale" = "Interaction: Slight risk × Female",
+  "RSKMRJWKModerate risk:IRSEXFemale" = "Interaction: Moderate risk × Female",
+  "RSKMRJWKGreat risk:IRSEXFemale" = "Interaction: Great risk × Female"
+)
+
+# Table 2
+model3_df <- data.frame(
+  Variable = rownames(exp(cbind(OR = coef(model3), confint(model3)))),
+  exp(cbind(OR = coef(model3), confint(model3)))
+)
+
+model3_df <- model3_df[model3_df$Variable != "(Intercept)", ]
+model3_df$Variable <- label_map[model3_df$Variable]
+
+colnames(model3_df) <- c("Variable","OR","Lower 95% CI","Upper 95% CI")
+model3_df
+```
+
 Model 4: Interaction Model (RSKMRJWK X IRSEX)
 
 ```{r}
@@ -348,11 +371,25 @@ Intepretation:
 The interaction model does not significantly outperform Model 3.
 Sex does not significantly modify the relationship between perceived risk and marijuana use.
 
+### Table 3. Interaction Model of Perceived Risk × Sex (Model 4)
+```{r}
+model4_df <- data.frame(
+  Variable = rownames(exp(cbind(OR = coef(model4), confint(model4)))),
+  exp(cbind(OR = coef(model4), confint(model4)))
+)
+
+model4_df <- model4_df[model4_df$Variable != "(Intercept)", ]
+model4_df$Variable <- label_map[model4_df$Variable]
+
+colnames(model4_df) <- c("Variable","OR","Lower 95% CI","Upper 95% CI")
+model4_df
+```
+
 ## 3.6 Model Performance
 
 Predicted Probabilities (full adjusted Model)
 
-```{r}
+```{r, fig.width=8, fig.height=6}
 odds.n.ends(model3, predProbPlot = TRUE)
 ```
 
@@ -365,7 +402,7 @@ odds.n.ends(model3, rocPlot = TRUE)
 
 Predicted Probabilities (Interaction Model)
 
-```{r}
+```{r, fig.width=8, fig.height=6}
 odds.n.ends(model4, predProbPlot = TRUE)
 ```
 
@@ -387,10 +424,9 @@ Intepretation:
 Perceived risk of smoking marijuana once or twice a week was strongly and associated with past 30-day use among adolescents. Youth who viewed marijuana as more harmful had substantially lower odds of recent use, indicating a clear dose–response relationship. This association continued after adjusting for age, sex, peer disapproval, and parental disapproval.
 Testing for effect modification showed that the perceived risk–use association was similar for males and females. Although the point estimates differed very slightly, particularly in the moderate- and great-risk categories, the sex × perceived risk interaction was not statistically significant. These findings suggest that perceived risk impacts marijuana use similarly for both male and female adolescents.
 Peer and parental disapproval were also strongly associated with lower marijuana use. Adolescents whose friends disapproved of marijuana use had the lowest odds of reporting past-month use, highlighting the major influence of peer norms during adolescence. 
-Overall, the results highlight the importance of perceived harm as a key driver of adolescent substance-use behavior. Public health efforts that strengthen risk perception, such as school-based education, media campaigns, and family communication strategies, along with strong peer and parent support, can help reduce use.
 
-#5. Reproducibility All data cleaning, descriptive analysis, and
-Modeling scripts are stored in the project repository: 
+# 5. Reproducibility 
+All data cleaning, descriptive analysis, and Modeling scripts are stored in the project repository: 
  - 01_data_cleaning.R 
  - 02_descriptive_analysis.R 
  - 03_modeling.R 
