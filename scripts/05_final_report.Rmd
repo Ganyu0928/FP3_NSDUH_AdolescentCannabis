@@ -178,6 +178,58 @@ p <- grViz("digraph flowchart {
       ")
 p
 ```
+## DAG 
+
+```{r}
+install.packages("dagitty")
+library(dagitty)
+
+dag <- dagitty("
+dag {
+  PerceivedRisk
+  MarijuanaUse
+  Age
+  Sex
+  PeerDisapproval
+  ParentDisapproval
+
+  PerceivedRisk -> MarijuanaUse
+
+  Age -> PerceivedRisk
+  Age -> MarijuanaUse
+
+  Sex -> PerceivedRisk
+  Sex -> MarijuanaUse
+
+  PeerDisapproval -> PerceivedRisk
+  PeerDisapproval -> MarijuanaUse
+
+  ParentDisapproval -> PerceivedRisk
+  ParentDisapproval -> MarijuanaUse
+}
+")
+
+coordinates(dag) <- list(
+  x = c(
+    Age = 0.1,
+    Sex = 0.1,
+    PeerDisapproval = 0.1,
+    ParentDisapproval = 0.1,
+    PerceivedRisk = 0.5,
+    MarijuanaUse = 0.9
+  ),
+  y = c(
+    Age = 0.8,
+    Sex = 0.2,
+    PeerDisapproval = 0.6,
+    ParentDisapproval = 0.4,
+    PerceivedRisk = 0.5,
+    MarijuanaUse = 0.5
+  )
+)
+plot(dag, lwd = 2)
+plot(dag)
+```
 
 ## Descriptive Cross-Tabulations
 
