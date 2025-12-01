@@ -1,14 +1,16 @@
 ---
 title: "Perceived Risk and Marijuana Use Among Adolescents (NSDUH 2023)"
-student: "Ganyu Liu"
+student: Ganyu Liu
 output:
+  word_document:
+    toc: true
+  pdf_document:
+    toc: true
   html_document:
     theme: readable
     toc: true
     toc_float: true
     number_sections: true
-  pdf_document:
-    toc: true
 editor_options:
   markdown:
     wrap: 72
@@ -31,32 +33,32 @@ library(rsvg)
 library(table1)
 ```
 
-# 1. Background
+# Background
 
 Adolescent marijuana use is a persistent public health issue. Although use has remained relatively stable, perceived harm from marijuana continues to decrease among youth. Understanding how perceived risk relates to actual use can help inform prevention strategies and targeted public health messaging.
 This analysis uses the 2023 National Survey on Drug Use and Health (NSDUH) to examine the relationship between perceived risk of weekly marijuana use and past 30-day marijuana use among adolescents ages 12–17. We also explore whether this relationship differs by sex.
 
-# 2. Methods
+# Methods
 
-## 2.1 Data Source
+## Data Source
 Data come from the 2023 NSDUH public-use file. All data cleaning, recoding, and analytic preparation were completed systematically and using reproducible scripts. 
 
-## 2.2 Key Variables 
+## Key Variables 
 Exposure: Perceived risk of smoking marijuana weekly (RSKMRJWK) 
 - Categories: No risk, Slight risk, Moderate risk, Great risk 
 Outcome: Past 30-day marijuana use (MJDAY30A)
 - Categories: No use, Used 
 Covariate: Sex (IRSEX: Male, Female) 
 
-## 2.3 Statistical Analysis 
+## Statistical Analysis 
 Descriptive statistics summarized the sample and the distribution of exposure, outcome, and covariates. Logistic regression was used to estimate the association between perceived risk and marijuana use. Three models were fit: Unadjusted model Adjusted
 model including sex Interaction model testing risk × sex Predicted probabilities and ROC curves to assess model performance.
 
-## 2.4 Study Population 
+## Study Population 
 The sample included adolescents ages 12–17 with complete information on perceived risk, past 30-day marijuana use, and sex. Exclusion steps were applied. A flow diagram (Figure 1) summarizes how the final analytic dataset was created. 
 
-# 3. Results 
-## 3.1 Study Flow and Exclusion Diagram
+# Results 
+## Study Flow and Exclusion Diagram
 ```{r}
 # Load raw NSDUH data
 load("~/Desktop/FA2025/6009/assignment-1-RQ/Github/FP3_NSDUH_AdolescentCannabis/data_raw/NSDUH_2023.Rdata")
@@ -174,9 +176,10 @@ p <- grViz("digraph flowchart {
       [3]: 'Excluding missing past 30-day marijuana use (MJDAY30A): n excluded = 115; n remaining = 11152'
       [4]: 'Excluding missing sex (IRSEX): n excluded = 0; Final analytic sample = 11152'
       ")
+p
 ```
 
-## 3.3 Descriptive Cross-Tabulations
+## Descriptive Cross-Tabulations
 
 ```{r}
 table(analytic$RSKMRJWK)
@@ -196,7 +199,6 @@ Interpretation:
 ### Table 1. Descriptive Characteristics
 ```{r}
 library(table1)
-library(webshot2)
 
 label(analytic$AGE3)     <- "Age (3-level)"
 label(analytic$IRSEX)    <- "Sex"
@@ -204,17 +206,18 @@ label(analytic$RSKMRJWK) <- "Perceived risk of weekly marijuana use"
 label(analytic$YFLMJMO)  <- "Peer disapproval of marijuana use"
 label(analytic$YEPMJMO)  <- "Parental disapproval of marijuana use"
 label(analytic$MJDAY30A) <- "Past 30-day marijuana use"
-# Table 1
-t1 <- table1(~ AGE3 + IRSEX + RSKMRJWK + YFLMJMO + YEPMJMO + MJDAY30A,
-       data = analytic,
-       overall = TRUE,
-       caption = "Table 1. Descriptive Characteristics of the Analytic Sample",
-       render.strat = function(...) ""
-       )
-t1
+
+# Table 1.
+table1(
+  ~ AGE3 + IRSEX + RSKMRJWK + YFLMJMO + YEPMJMO + MJDAY30A,
+  data         = analytic,
+  overall      = "Total",
+  rowlabelhead = "Variable",
+  caption      = "Table 1. Descriptive Characteristics of the Analytic Sample"
+)
 ```
 
-## 3.4 Figure 2. Marijuana Use by Perceived Risk
+## Figure 2. Marijuana Use by Perceived Risk
 
 ```{r}
 # Ensure MJDAY30A is a factor
@@ -240,7 +243,7 @@ In the MODERATE RISK group, 116 reported use and 3442 did not use.
 In the GREAT RISK group, 30 adolescents reported use and 3478 did not use.
 As the figure 1. showing, the number of users steadily decreased as perceived risk increased which supports the expected crude association, adolescents who view marijuana as less risk are more likely to have used in the past 30 days.
 
-## 3.5 Logistic Regression Models
+## Logistic Regression Models
 
 Model 1: Unadjusted
 
@@ -394,7 +397,7 @@ colnames(model4_df) <- c("Variable","OR","Lower 95% CI","Upper 95% CI")
 model4_df
 ```
 
-## 3.6 Model Performance
+## Model Performance
 
 Predicted Probabilities (full adjusted Model)
 
@@ -428,13 +431,13 @@ Intepretation:
 - Low sensitivity is acceptable because the proportion of users in the group is low. Specificity remains high, so ROC curves show strong performance.
 - Model 3 and Model 4 show identical predicted probabilities and ROC curves that match the non-significant sex interaction result.
 
-# 4. Discussion
+# Discussion
 
 Perceived risk of smoking marijuana once or twice a week was strongly and associated with past 30-day use among adolescents. Youth who viewed marijuana as more harmful had substantially lower odds of recent use, indicating a clear dose–response relationship. This association continued after adjusting for age, sex, peer disapproval, and parental disapproval.
 Testing for effect modification showed that the perceived risk–use association was similar for males and females. Although the point estimates differed very slightly, particularly in the moderate- and great-risk categories, the sex × perceived risk interaction was not statistically significant. These findings suggest that perceived risk impacts marijuana use similarly for both male and female adolescents.
 Peer and parental disapproval were also strongly associated with lower marijuana use. Adolescents whose friends disapproved of marijuana use had the lowest odds of reporting past-month use, highlighting the major influence of peer norms during adolescence. 
 
-# 5. Reproducibility 
+# Reproducibility 
 All data cleaning, descriptive analysis, and Modeling scripts are stored in the project repository: 
  - 01_data_cleaning.R 
  - 02_descriptive_analysis.R 
