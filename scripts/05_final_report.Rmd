@@ -181,7 +181,6 @@ p
 ## DAG 
 
 ```{r}
-install.packages("dagitty")
 library(dagitty)
 
 dag <- dagitty("
@@ -448,6 +447,63 @@ model4_df$Variable <- label_map[model4_df$Variable]
 colnames(model4_df) <- c("Variable","OR","Lower 95% CI","Upper 95% CI")
 model4_df
 ```
+
+## Assumption checking 
+```{r}
+library(car)
+vif(model3)
+```
+All values were < 2, indicating no meaningful multicollinearity. 
+
+### MInfluential Observations (Cook’s D, leverage, dfbetas)
+```{r}
+library(broom)
+diag_m3 <- augment(model3) %>%
+  mutate(index = 1:n())
+
+# cook's distance plot
+plot(model3, which = 4, id.n = 3, col = "pink")
+abline(h = 1, col = "pink", lty = 2)
+
+# identify observations above cutoff points (cook's distance)
+sum(diag_m3$.cooksd > 1)
+
+# Leverage (hat values)
+plot(model3, which = 5, id.n = 3)
+
+# dfbetas summary
+summary(dfbetas(model3))
+
+```
+Cook’s D, leverage, and dfbetas indicated no influential observations. However, a few cases had slightly higher leverage values, but their Cook’s D values were extremely small (<0.01), showing they might have minimal influence on parameter estimates. No data points required removal.
+
+### Goodness of fit (Hosmer–Lemeshow)
+
+```{r}
+library(ResourceSelection)
+
+hoslem.test(
+  x = as.numeric(complete_data$MJDAY30A) - 1,  # convert to 0/1
+  y = fitted(model3)
+)
+```
+The Hosmer-Lemeshow test was statistically significant (p=0.0025), which is above less than 0.05. This suggests some lack of calibration. The reason could be the sample size is large above 11,000, and the HLT is sensitive to flag any minor deviations, so this would be fine. Visual dianostics (ROC AUC = 0.88) and predicted probability plots both acceptable overall model performance. The model is acceptable fit. 
+
+### Linearity of the logit (AGE3)
+
+```{r}
+model3_age_test <- glm(
+  MJDAY30A ~ RSKMRJWK + IRSEX + YFLMJMO + YEPMJMO +
+    AGE3 + I(AGE3 * log(AGE3)),
+  data = complete_data,
+  family = binomial
+)
+
+summary(model3_age_test)
+
+```
+The linearity-in-the-logit assumption applies only to continuous predictors. In this study, age represents three discrete adolescent age groups (12-13, 14-15, 16-17). It functions as an ordinal categorical variable, and therefore the linearity assumption does not apply. A box-tidwell applied, adn reached statistical significance; however, age is not a true continuous measures, this result is not meaningful.
+All other predictors were categorical, so the linearity assumption was not relevant, and no violations were detected for variables to which the assumption applies.
 
 ## Model Performance
 
