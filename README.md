@@ -31,6 +31,7 @@ Adolescent marijuana use remains stable nationally, but perceived harm has stead
   - 02_descriptive_analysis.R  
   - 03_modeling.R  
   - 04_interaction_model.R
+  - 05_final_report.Rmd
 
 - **output/**  
   - Tables and results
@@ -51,6 +52,7 @@ Adolescent marijuana use remains stable nationally, but perceived harm has stead
    - `scripts/02_descriptive_analysis.R`
    - `scripts/03_modeling.R`
    - `scripts/04_interaction_model.R`
+   - `scripts/05_final_report.Rmd`
 4. All outputs will be automatically saved to `/output/`.
 
 ## Documentation
